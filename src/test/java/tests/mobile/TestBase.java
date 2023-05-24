@@ -14,22 +14,39 @@ import static com.codeborne.selenide.logevents.SelenideLogger.addListener;
 
 public class TestBase {
     static String deviceHost = System.getProperty("deviceHost");
+//    @BeforeAll
+//    public static void setup() {
+//        addListener("AllureSelenide", new AllureSelenide());
+////        switch (deviceHost) {
+////            case "browserstack":
+//                Configuration.browser = BrowserstackDriver.class.getName();
+////                break;
+////            case "local":
+////                Configuration.browser = LocalDriver.class.getName();
+////                break;
+////            default:
+////                throw new RuntimeException();
+////        }
+//        Configuration.browserSize = null;
+//    }
+//
     @BeforeAll
     public static void setup() {
-        addListener("AllureSelenide", new AllureSelenide());
-//        switch (deviceHost) {
-//            case "browserstack":
+        if (deviceHost == null) {
+            deviceHost = "local";
+        }
+
+        switch (deviceHost) {
+            case "real":
+            case "local":
+                Configuration.browser = LocalDriver.class.getName();
+                break;
+            case "browserstack":
                 Configuration.browser = BrowserstackDriver.class.getName();
-//                break;
-//            case "local":
-//                Configuration.browser = LocalDriver.class.getName();
-//                break;
-//            default:
-//                throw new RuntimeException();
-//        }
+                break;
+        }
         Configuration.browserSize = null;
     }
-
     @BeforeEach
     public void startDriver() {
         open();
@@ -39,6 +56,10 @@ public class TestBase {
     public void afterEach() {
         String sessionId = sessionId().toString();
         closeWebDriver();
-        Attach.addVideo(sessionId);
+        switch (deviceHost) {
+            case "browserstack":
+                Attach.addVideo(sessionId);
+                break;
+        }
     }
 }
