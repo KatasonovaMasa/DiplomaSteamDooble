@@ -14,22 +14,6 @@ import static com.codeborne.selenide.logevents.SelenideLogger.addListener;
 
 public class TestBase {
     static String deviceHost = System.getProperty("deviceHost");
-//    @BeforeAll
-//    public static void setup() {
-//        addListener("AllureSelenide", new AllureSelenide());
-////        switch (deviceHost) {
-////            case "browserstack":
-//                Configuration.browser = BrowserstackDriver.class.getName();
-////                break;
-////            case "local":
-////                Configuration.browser = LocalDriver.class.getName();
-////                break;
-////            default:
-////                throw new RuntimeException();
-////        }
-//        Configuration.browserSize = null;
-//    }
-//
     @BeforeAll
     public static void setup() {
         if (deviceHost == null) {
@@ -56,10 +40,8 @@ public class TestBase {
     public void afterEach() {
         String sessionId = sessionId().toString();
         closeWebDriver();
-        switch (deviceHost) {
-            case "browserstack":
-                Attach.addVideo(sessionId);
-                break;
+        if ("browserstack".equals(deviceHost)) {
+            Attach.addVideo(sessionId);
         }
     }
 }
