@@ -21,7 +21,6 @@ public class TestBase {
         }
 
         switch (deviceHost) {
-            case "real":
             case "local":
                 Configuration.browser = LocalDriver.class.getName();
                 break;
