@@ -40,8 +40,5 @@ public class TestBase {
         String sessionId = sessionId().toString();
         closeWebDriver();
         Attach.addVideo(sessionId);
-        if (deviceHost.equals("browserstack")) {
-            Attach.addVideo(sessionId);
-        }
     }
 }
